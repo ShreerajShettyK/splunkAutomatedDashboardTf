@@ -31,3 +31,11 @@ variable "pagerduty_api_token" {
   type        = string
   sensitive   = true  # Marks this variable as sensitive to prevent logging
 }
+
+variable "action_pagerduty_custom_details" {
+  default = { 
+    "event_type" = "trigger", 
+    "Job Label" = "$job.label$", 
+    "timestamp" = "$result._time$" 
+  }
+}

@@ -1,18 +1,7 @@
-# Install PagerDuty app
-resource "splunk_apps_local" "pagerduty_app" {
-  filename         = true
-  name             = "C:/Users/Relanto/Downloads/pagerduty-app-for-splunk_405.tgz"
-  explicit_appname = "pagerduty_incidents"
-  auth             = var.splunk_token
-  label            = "PagerDuty App for Splunk"
-  version          = "4.1.0"
-  visible          = false
-}
-
-# # Install PagerDuty app from Splunkbase
+# # Install PagerDuty app
 # resource "splunk_apps_local" "pagerduty_app" {
-#   filename         = false
-#   name             = "pagerduty_incidents"
+#   filename         = true
+#   name             = "C:/Users/Relanto/Downloads/pagerduty-app-for-splunk_405.tgz"
 #   explicit_appname = "pagerduty_incidents"
 #   auth             = var.splunk_token
 #   label            = "PagerDuty App for Splunk"
@@ -20,47 +9,58 @@ resource "splunk_apps_local" "pagerduty_app" {
 #   visible          = false
 # }
 
-# Configure PagerDuty settings
-resource "splunk_configs_conf" "pagerduty_settings" {
-  name = "pagerduty/setup"
+# # # Install PagerDuty app from Splunkbase
+# # resource "splunk_apps_local" "pagerduty_app" {
+# #   filename         = false
+# #   name             = "pagerduty_incidents"
+# #   explicit_appname = "pagerduty_incidents"
+# #   auth             = var.splunk_token
+# #   label            = "PagerDuty App for Splunk"
+# #   version          = "4.1.0"
+# #   visible          = false
+# # }
 
-  variables = {
-    "api_token"       = var.pagerduty_api_token
-    "integration_key" = var.pagerduty_integration_key
-    "integration_url" = var.pagerduty_integration_url
-  }
+# # Configure PagerDuty settings
+# resource "splunk_configs_conf" "pagerduty_settings" {
+#   name = "pagerduty/setup"
 
-  depends_on = [splunk_apps_local.pagerduty_app]
-}
+#   variables = {
+#     "api_token"       = var.pagerduty_api_token
+#     "integration_key" = var.pagerduty_integration_key
+#     "integration_url" = var.pagerduty_integration_url
+#   }
 
-# Create saved search with PagerDuty alert action
-resource "splunk_saved_searches" "pagerduty_alert" {
-  name             = "High_Priority_Errors_PagerDuty"
-  search           = "index=user_management_api_dev | stats count as API_Hits"
-  description      = "Alert for high priority api counts"
-  disabled         = false
-  is_scheduled     = true
-  cron_schedule    = "*/2 * * * *"
-  alert_type       = "number of events"
-  alert_threshold  = "0"
-  alert_comparator = "greater than"
+#   depends_on = [splunk_apps_local.pagerduty_app]
+# }
 
-  # alert_actions = ["pagerduty_alert"]
+# # Create saved search with PagerDuty alert action
+# resource "splunk_saved_searches" "pagerduty_alert" {
+#   name             = "High_Priority_Errors_PagerDuty"
+#   search           = "index=user_management_api_dev | stats count as API_Hits"
+#   description      = "Alert for high priority api counts"
+#   disabled         = false
+#   is_scheduled     = true
+#   cron_schedule    = "*/2 * * * *"
+#   alert_type       = "number of events"
+#   alert_threshold  = "0"
+#   alert_comparator = "greater than"
 
-  actions                         = "pagerduty"
-  action_pagerduty_custom_details = jsonencode(var.action_pagerduty_custom_details)
+#   # alert_actions = ["pagerduty_alert"]
 
-  action_pagerduty_integration_key_override = var.pagerduty_integration_key
+#   actions                         = "pagerduty"
+#   action_pagerduty_custom_details = jsonencode(var.action_pagerduty_custom_details)
 
-  dispatch_earliest_time = "-5m"
-  dispatch_latest_time   = "now"
+#   action_pagerduty_integration_key_override = var.pagerduty_integration_key
 
-  alert_track       = true
-  alert_severity    = "4"
-  alert_digest_mode = true
+#   dispatch_earliest_time = "-5m"
+#   dispatch_latest_time   = "now"
 
-  depends_on = [
-    splunk_apps_local.pagerduty_app,
-    splunk_configs_conf.pagerduty_settings
-  ]
-}
+#   alert_track       = true
+#   alert_severity    = "4"
+#   alert_digest_mode = true
+
+#   depends_on = [
+#     splunk_apps_local.pagerduty_app,
+#     splunk_configs_conf.pagerduty_settings
+#   ]
+# }

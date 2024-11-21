@@ -22,8 +22,8 @@ variable "pagerduty_integration_key" {
 
 variable "pagerduty_integration_url" {
   type        = string
+  sensitive   = true
   description = "PagerDuty integration URL"
-  default     = "https://events.pagerduty.com/v2/enrich/pd-vendor"
 }
 
 variable "pagerduty_api_token" {

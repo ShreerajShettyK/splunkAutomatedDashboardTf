@@ -13,5 +13,5 @@ C:\Program Files\Splunk\bin> ./splunk remove app pagerduty_incidents -auth admin
 
 
 TODO:
-to run this terraform code we need auth token
+1) to run this terraform code we need auth token
 For this auth token we have to restrict access

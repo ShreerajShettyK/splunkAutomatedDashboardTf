@@ -18,12 +18,12 @@ resource "random_password" "password" {
 }
 
 resource "splunk_authentication_users" "user01" {
-  name              = "dashboard_viewer_user" 
-  email             = "rajshetty727@gmail.com"
+  name              = "dashboard_viewer_user"
+  email             = local.splunk_secrets["user_email"]
   password          = random_password.password.result
   force_change_pass = false
   realname          = "Dashboard Viewer"
-  roles             = [splunk_authorization_roles.dashboard_viewer.name] 
+  roles             = [splunk_authorization_roles.dashboard_viewer.name]
   depends_on = [
     splunk_authorization_roles.dashboard_viewer
   ]
@@ -31,15 +31,13 @@ resource "splunk_authentication_users" "user01" {
 
 resource "splunk_data_ui_views" "user_management_api_dashboard" {
   name     = "Team1_Dashboard"
-  eai_data = file("dashboard_template.xml") 
-
+  eai_data = file("dashboard_template.xml")
   acl {
     owner   = "admin"
     app     = "search"
     sharing = "app"
     read    = [splunk_authorization_roles.dashboard_viewer.name]
   }
-
   depends_on = [
     splunk_authorization_roles.dashboard_viewer,
     splunk_authentication_users.user01

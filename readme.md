@@ -8,6 +8,23 @@ terraform state list
 
 terraform destroy -var-file="secret.tfvars"
 
+
+Deployment Steps:
+
+First, create the S3 bucket:
+
+# Temporarily comment out the backend block in backend.tf
+terraform init
+terraform apply
+
+After the bucket is created, uncomment the backend block in main.tf
+Migrate the state:
+
+terraform init -migrate-state
+
+
+
+
 COMMAND TO DELETE AN APP LOCALLY:
 C:\Program Files\Splunk\bin> ./splunk remove app pagerduty_incidents -auth admin:adminadmin
 

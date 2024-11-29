@@ -1,28 +1,23 @@
 resource "splunk_authorization_roles" "dashboard_viewer" {
-  name                   = "dashboard_viewer_role"
-  default_app            = "search"
-  search_indexes_allowed = ["user_management_api_dev"]
-  search_indexes_default = ["user_management_api_dev"]
-  capabilities = [
-    "search",
-    "list_all_objects",
-    "rest_properties_get",
-    "embed_report"
-  ]
+  name                   = var.role_name
+  default_app            = var.default_app
+  search_indexes_allowed = var.search_indexes_allowed
+  search_indexes_default = var.search_indexes_default
+  capabilities = var.capabilities
 }
 
 resource "random_password" "password" {
-  length           = 16
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  length           = 10
+  special          = false
+  # override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 resource "splunk_authentication_users" "user01" {
-  name              = "dashboard_viewer_user"
+  name              = var.user_name
   email             = local.splunk_secrets["user_email"]
   password          = random_password.password.result
-  force_change_pass = false
-  realname          = "Dashboard Viewer"
+  force_change_pass = var.user_force_change_pass
+  realname          = var.user_realname
   roles             = [splunk_authorization_roles.dashboard_viewer.name]
   depends_on = [
     splunk_authorization_roles.dashboard_viewer
@@ -30,12 +25,12 @@ resource "splunk_authentication_users" "user01" {
 }
 
 resource "splunk_data_ui_views" "user_management_api_dashboard" {
-  name     = "Team1_Dashboard"
+  name     = var.dashboard_name
   eai_data = file("dashboard_template.xml")
   acl {
-    owner   = "admin"
-    app     = "search"
-    sharing = "app"
+    owner   = var.dashboard_acl_owner
+    app     = var.dashboard_acl_app
+    sharing = var.dashboard_acl_sharing
     read    = [splunk_authorization_roles.dashboard_viewer.name]
   }
   depends_on = [

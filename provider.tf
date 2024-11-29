@@ -5,7 +5,6 @@ provider "splunk" {
 }
 
 provider "random" {
-  # Configuration options
 }
 
 provider "aws" {

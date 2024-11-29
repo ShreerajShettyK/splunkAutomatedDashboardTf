@@ -13,7 +13,12 @@ output "dashboard_name" {
   value       = splunk_data_ui_views.user_management_api_dashboard.name
 }
 
-output "s3_backend_bucket" {
-  description = "S3 bucket name for Terraform state"
-  value       = aws_s3_bucket.terraform_state.id
+# output "s3_backend_bucket" {
+#   description = "S3 bucket name for Terraform state"
+#   value       = aws_s3_bucket.terraform_state.id
+# }
+
+output "generated_password" {
+  value     = random_password.password.result
+  sensitive = true 
 }

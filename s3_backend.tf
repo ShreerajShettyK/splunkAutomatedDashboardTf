@@ -1,8 +1,8 @@
 # S3 Bucket for Terraform State
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "my-terraform-state-bucket-${var.aws_region}-dev"
+  bucket = "${var.s3_bucket_name}-${var.aws_region}"
   
-  # Prevent accidental deletion of the bucket
+  # Prevent accidental deletion of the bucket when terr apply
   lifecycle {
     prevent_destroy = true
   }
@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "terraform_state" {
 resource "aws_s3_bucket_versioning" "terraform_state_versioning" {
   bucket = aws_s3_bucket.terraform_state.id
   versioning_configuration {
-    status = "Enabled"
+    status = var.s3_versioning_status
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_e
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = var.s3_sse_algorithm             //we can have AES256 or kms key atached for sse
     }
   }
 }

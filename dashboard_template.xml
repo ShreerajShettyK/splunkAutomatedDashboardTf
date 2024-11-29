@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <dashboard version="2" theme="dark">
-    <label>Terraform Automated Dashboard New</label>
+    <label>Terraform Automated Dashboard</label>
     <description>Dashboard through Terraform</description>
     <definition><![CDATA[
 {

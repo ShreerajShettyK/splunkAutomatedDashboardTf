@@ -3,7 +3,7 @@
 #   filename         = true
 #   name             = "C:/Users/Relanto/Downloads/pagerduty-app-for-splunk_405.tgz"
 #   explicit_appname = "pagerduty_incidents"
-#   auth             = var.splunk_token
+#   auth             = local.splunk_secrets["splunk_token"]
 #   label            = "PagerDuty App for Splunk"
 #   version          = "4.1.0"
 #   visible          = false
